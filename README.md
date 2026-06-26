@@ -6,7 +6,7 @@ the activations of a **1D CNN** trained on [AudioMNIST](https://github.com/soere
 (Becker et al.) flow through the network in 3D. All inference runs **in the browser** via
 TensorFlow.js.
 
-![demo](images/cnn_3d.png)
+![demo](images/screenshot.png)
 
 ## Features
 
