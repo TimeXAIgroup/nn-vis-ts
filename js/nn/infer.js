@@ -20,7 +20,8 @@ var Infer = (function () {
 
     var filterCache = {};  // layerName -> {K, inC, outC, data:Float32Array}
     var convToLast = null; // model: input -> last conv output
-    var tailModel = null;  // model: last conv output -> final output
+    var tailModel = null;  // model: last conv output -> penultimate features
+    var outW = null, outB = null; // output Dense weights (for pre-softmax logits)
     var lastConvName = null;
 
     async function load(modelUrl, spec) {
@@ -43,10 +44,17 @@ var Infer = (function () {
         var convIdx = baseModel.layers.findIndex(function (l) { return l.name === lastConvName; });
         var lastConv = baseModel.layers[convIdx];
         convToLast = tf.model({ inputs: baseModel.inputs, outputs: lastConv.output });
+
+        // Tail from the last conv output up to the PENULTIMATE layer (i.e. the
+        // input to the final softmax). Grad-CAM then differentiates the raw
+        // class logit = penult @ Wout + bout, not the softmax probability.
+        var last = baseModel.layers.length - 1;
         var ti = tf.input({ shape: lastConv.outputShape.slice(1) });
         var y = ti;
-        for (var i = convIdx + 1; i < baseModel.layers.length; i++) y = baseModel.layers[i].apply(y);
-        tailModel = tf.model({ inputs: ti, outputs: y });
+        for (var i = convIdx + 1; i < last; i++) y = baseModel.layers[i].apply(y);
+        tailModel = tf.model({ inputs: ti, outputs: y });           // -> penultimate features
+        var ow = baseModel.layers[last].getWeights();               // [kernel, bias] of output Dense
+        outW = ow[0]; outB = ow[1];                                 // kept (module-level, not in tidy)
         return true;
     }
 
@@ -57,7 +65,9 @@ var Infer = (function () {
             var x = tf.tensor(waveform, [1, inputLen, 1]);
             var A = convToLast.predict(x);                       // [1, T, C]
             var scoreFn = function (a) {
-                return tailModel.apply(a).slice([0, classIdx], [1, 1]).sum();
+                var penult = tailModel.apply(a);                  // [1, units]
+                var logits = penult.matMul(outW).add(outB);       // pre-softmax  [1, classes]
+                return logits.slice([0, classIdx], [1, 1]).sum();
             };
             var grads = tf.grad(scoreFn)(A);                     // [1, T, C]
             var alpha = grads.mean(1);                           // [1, C]  (avg over time)
