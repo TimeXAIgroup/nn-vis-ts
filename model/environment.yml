@@ -1,0 +1,13 @@
+name: audiomnist-nnvis
+channels:
+  - conda-forge
+dependencies:
+  - python=3.11
+  - pip
+  - numpy
+  - scikit-learn
+  - librosa
+  - soundfile
+  - pip:
+      - tensorflow
+      - tensorflowjs
