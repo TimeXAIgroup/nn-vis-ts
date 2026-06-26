@@ -2,49 +2,12 @@
 <html lang="en">
   <head>
     <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>An Interactive 3D Visualization of a 1D CNN for Spoken Digits</title>
-    <link href='https://fonts.googleapis.com/css?family=Source+Sans+Pro:400,700' rel='stylesheet' type='text/css'>
-    <style>
-      body { font-family: 'Source Sans Pro', sans-serif; font-size: 18px; line-height: 1.5em;
-             margin: 0; color: #222; }
-      #pageContent { max-width: 960px; margin: 0 auto; padding: 20px 5%; }
-      h1, h2 { font-weight: normal; line-height: 1.4em; }
-      a { color: #06c; }
-      .project { background: #f9f9f9; border-top: 1px solid #ccc; border-bottom: 1px solid #ccc;
-                 margin: 24px 0; display: flex; align-items: center; }
-      .project .image { width: 40%; background: #000; }
-      .project .image img { width: 100%; display: block; }
-      .project .text { padding: 20px; }
-      .cite { background: #f0f0f0; padding: 10px; }
-    </style>
+    <title>3D Visualization of a 1D CNN for Spoken Digits</title>
+    <meta http-equiv="refresh" content="0; url=cnn/3d.html">
+    <link rel="canonical" href="cnn/3d.html">
+    <script>location.replace('cnn/3d.html');</script>
   </head>
-  <body>
-    <div id="pageContent">
-      <h1>An Interactive 3D Visualization of a 1D Convolutional Neural Network for Spoken Digits</h1>
-      <p>A reworking of <a href="https://adamharley.com/">Adam Harley</a>'s node-link CNN
-         visualization for <strong>time-series / speech</strong> input. A 1D CNN is trained on
-         <a href="https://github.com/soerenab/AudioMNIST">AudioMNIST</a> (Becker et al., spoken
-         digits 0&ndash;9). Pick a speech sample and watch the activations propagate through the
-         network in 3D. Inference runs entirely in the browser via TensorFlow.js.</p>
-
-      <h2>Demo</h2>
-      <div class="project">
-        <a class="image" href="./cnn/3d.html"><img src="images/cnn_3d.png" alt="3D 1D-CNN visualization"></a>
-        <div class="text">
-          <div><a href="./cnn/3d.html"><strong>3D 1D-CNN visualization</strong></a></div>
-          Raw 8&nbsp;kHz waveform input &rarr; three Conv1D + max-pooling stages &rarr; two
-          fully-connected layers (10-way softmax). Each node is one activation; hover to inspect
-          values and connections.
-        </div>
-      </div>
-
-      <h2>Training &amp; model pipeline</h2>
-      <p>The model is trained offline with Keras and exported to TensorFlow.js. See
-         <code>model/</code> and <code>model/start.sh</code> for the full pipeline (download &rarr;
-         preprocess &rarr; train &rarr; export). Original paper:</p>
-      <div class="cite">A. W. Harley, "An Interactive Node-Link Visualization of Convolutional
-         Neural Networks," in ISVC, pages 867&ndash;877, 2015.</div>
-    </div>
+  <body style="background:#2b2f33;color:#ddd;font-family:sans-serif">
+    <p>Redirecting to the <a href="cnn/3d.html" style="color:#6cf">demo</a>&hellip;</p>
   </body>
 </html>
