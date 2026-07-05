@@ -73,6 +73,21 @@
       Loading model&hellip;
     </div>
 
+    <script>
+      // Safari/WebKit sometimes returns null from getShaderPrecisionFormat, which
+      // crashes old Three.js (r71) during WebGLRenderer init ("null is not an object
+      // (evaluating '...precision')"). Guarantee a non-null result. No-op elsewhere.
+      (function () {
+        [window.WebGLRenderingContext, window.WebGL2RenderingContext].forEach(function (C) {
+          if (!C || !C.prototype) return;
+          var orig = C.prototype.getShaderPrecisionFormat;
+          if (!orig) return;
+          C.prototype.getShaderPrecisionFormat = function () {
+            return orig.apply(this, arguments) || { rangeMin: 127, rangeMax: 127, precision: 23 };
+          };
+        });
+      })();
+    </script>
     <script src="../js/three.min.js"></script>
     <script src="../js/myOrbitControls.js"></script>
     <script src="../js/stats.min.js"></script>
